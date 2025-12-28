@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool isAnagram(string s, string t) {
-        map<char,int> a;
+        unordered_map<char,int> a;
         for(char x: s){
             a[x] = 0;
         }
