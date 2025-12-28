@@ -1,13 +1,21 @@
 class Solution {
 public:
     bool isAnagram(string s, string t) {
-        sort(s.begin(),s.end());
-        sort(t.begin(),t.end());
-        if(s==t){
-            return true;
+        map<char,int> a;
+        for(char x: s){
+            a[x] = 0;
         }
-        else{
-            return false;
+        for(char x:s){
+            a[x] = a[x] +1;
         }
+        for(char x:t){
+            a[x] = a[x]-1;
+        }
+        for(auto x: a){
+            if(x.second !=0){
+                return false;
+            }
+        }
+        return true;
     }
 };
