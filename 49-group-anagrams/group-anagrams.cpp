@@ -6,14 +6,15 @@ public:
         }
         unordered_map<string, vector<string>> a;
         for(int i =0;i<strs.size();i++){
-            vector<char> b;
+            map<char,int> b;
             for(int j = 0; j<strs[i].size();j++){
-                b.push_back(strs[i][j]);
+                b[strs[i][j]] ++;
             }
-            sort(b.begin(),b.end());
-            string c = "";
-            for(int k=0;k<b.size();k++){
-                c+=b[k];
+            string c="";
+            for(auto y: b){
+                for(int k =0;k<y.second;k++){
+                    c+=y.first;
+                }
             }
             a[c].push_back(strs[i]);
         }
