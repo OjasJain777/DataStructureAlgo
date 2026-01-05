@@ -1,26 +1,23 @@
 class Solution {
 public:
     int firstUniqChar(string s) {
-        unordered_map<char,int> a;
-        for(char x: s){
-            a[x]++;
+        // 1. Replace Map with an Array of size 26
+        // Indices: 0='a', 1='b', ... 25='z'
+        int count[26] = {0}; 
+        
+        // Pass 1: Simple increment (No hashing)
+        for (char x : s) {
+            count[x - 'a']++;
         }
-        unordered_set<char> b;
-        for(auto y: a){
-            if(y.second==1){
-                b.insert(y.first);
-            }
-        }
-        for(int i =0; i<s.size();i++){
-            int si = b.size();
-            b.insert(s[i]);
-            if(si==b.size()){
+        
+        // Pass 2: Check the array
+        for (int i = 0; i < s.size(); i++) {
+            // Direct memory access O(1) - extremely fast
+            if (count[s[i] - 'a'] == 1) {
                 return i;
             }
-            else{
-                b.erase(s[i]);
-            }
         }
+        
         return -1;
     }
 };
