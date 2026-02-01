@@ -1,90 +1,33 @@
-bool c(vector<vector<int>> &arr, int i, int j, int mi, int mj){
-    if(arr[i][j]==arr[mi][mj]){
+bool c(vector<vector<int>> &arr, int i, int j, int m){
+    vector<int> dx = {-2,-2,2,2,-1,-1,1,1};
+    vector<int> dy = {-1, 1, -1, 1, -2, 2, -2, 2};
+    if(arr[i][j] == m){
         return 1;
     }
-    int h = 0;
     int a = arr[i][j];
-    if(i>1){
-        if(j>0){
-            if(arr[i-2][j-1] == a+1){
-                h=1;
-                return c(arr, i-2, j-1, mi, mj);
+    for(int k =0; k<dx.size();k++){
+        int in = i + dx[k];
+        int jn = j + dy[k];
+        if(in>=0 && in < arr.size() && jn>=0 && jn<arr[0].size()){
+            if(arr[in][jn] == a+1){
+                return c(arr, in, jn, m);
             }
         }
-        if(j<arr[0].size()-1){
-            if(arr[i-2][j+1] == a+1){
-                h=1;
-                return c(arr,i-2,j+1, mi,mj);
-            }
-        }
-    }
-    if(i+2<arr.size()){
-        if(j>0){
-            if(arr[i+2][j-1]==a+1){
-                h=1;
-                return c(arr,i+2,j-1,mi,mj);
-            }
-        }
-        if(j<arr[0].size()-1){
-            if(arr[i+2][j+1]==a+1){
-                h=1;
-                return c(arr,i+2,j+1,mi,mj);
-            }
-        }
-    }
-    if(j>1){
-        if(i>0){
-            if(arr[i-1][j-2]==a+1){
-                h=1;
-                return c(arr,i-1,j-2,mi,mj);
-            }        
-        }
-        if(i+1<arr.size()){
-            if(arr[i+1][j-2] == a+1){
-                h=1;
-                return c(arr, i+1,j-2,mi,mj);
-            }
-        }
-    }
-    if(j+2<arr[0].size()){
-        if(i>0){
-            if(arr[i-1][j+2]==a+1){
-                h=1;
-                return c(arr, i-1,j+2,mi,mj);
-            }
-        }
-        if(i+1<arr.size()){
-            if(arr[i+1][j+2] == a+1){
-                h=1;
-                return c(arr,i+1,j+2,mi,mj);
-            }
-        }
-    }
-    if(h==0){
-        return 0;
     }
     return 0;
 };
 class Solution {
 public:
     bool checkValidGrid(vector<vector<int>>& grid) {
-        int si = 0;
-        int sj = 0;
+        int m = INT_MIN;
         if(grid[0][0] !=0){
-            return false;
+            return 0;
         }
-        int mi;
-        int mj;
-        int m=INT_MIN;
         for(int i =0; i<grid.size();i++){
-            for(int j = 0;j<grid[0].size();j++){
-                if(grid[i][j] > m){
-                    m=grid[i][j];
-                    mi=i;
-                    mj = j;
-                }
+            for(int j =0; j<grid[0].size();j++){
+                m= max(m,grid[i][j]);
             }
         }
-        return c(grid, si,sj, mi,mj);
+        return c(grid, 0,0, m);
     }
 };
