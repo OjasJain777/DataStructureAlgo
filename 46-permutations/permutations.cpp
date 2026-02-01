@@ -1,16 +1,14 @@
-void p(vector<int> &arr, vector<int> &a, vector<vector<int>> &ans, unordered_map<int,int> &b, int i){
+void p(vector<int> &arr, vector<int> &a, vector<vector<int>> &ans, int i){
     if(i == arr.size()){
         ans.push_back(a);
         return;
     }
-    for(int j =0; j<arr.size();j++){
-        if(b[j]==0){
-            a.push_back(arr[j]);
-            b[j]++;
-            p(arr, a, ans, b, i+1);
-            b[j]--;
-            a.pop_back();
-        }
+    for(int j =i; j<arr.size();j++){
+        a.push_back(arr[j]);
+        swap(arr[i], arr[j]);
+        p(arr, a, ans, i+1);
+        swap(arr[i],arr[j]);
+        a.pop_back();
     }
 };
 class Solution {
@@ -18,8 +16,7 @@ public:
     vector<vector<int>> permute(vector<int>& nums) {
         vector<int> a;
         vector<vector<int>> ans;
-        unordered_map<int,int> b;
-        p(nums, a, ans,b, 0);
+        p(nums, a, ans, 0);
         return ans;
     }
 };
