@@ -10,22 +10,27 @@
  * };
  */
 
-void t(TreeNode *a, map<int, vector<int>> &b,int i){
+void t(TreeNode *a, vector<vector<int>> &b,int i){
     if(a==0){
         return;
     }
-    b[i].push_back(a->val);
+    if(i<b.size()){
+        b[i].push_back(a->val);
+    }
+    else{
+        b.push_back({a->val});
+    }
     t(a->left, b, i+1);
     t(a->right, b, i+1);
 }
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        map<int,vector<int>> b;
+        vector<vector<int>> b;
         vector<vector<int>> ans;
         t(root, b, 0);
         for(auto y: b){
-            ans.push_back(y.second);
+            ans.push_back(y);
         }
         return ans;
     }
