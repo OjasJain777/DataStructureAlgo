@@ -29,9 +29,6 @@ public:
         vector<vector<int>> b;
         vector<vector<int>> ans;
         t(root, b, 0);
-        for(auto y: b){
-            ans.push_back(y);
-        }
-        return ans;
+        return b;
     }
 };
