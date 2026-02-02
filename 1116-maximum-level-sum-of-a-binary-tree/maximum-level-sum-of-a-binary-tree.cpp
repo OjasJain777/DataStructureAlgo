@@ -10,7 +10,7 @@
  * };
  */
 
-void t(TreeNode *a, map<int, int> &b, int i){
+void t(TreeNode *a, unordered_map<int, int> &b, int i){
     if(a==0){
         return;
     }
@@ -21,12 +21,12 @@ void t(TreeNode *a, map<int, int> &b, int i){
 class Solution {
 public:
     int maxLevelSum(TreeNode* root) {
-        map<int,int> b;
+        unordered_map<int,int> b;
         t(root, b,0);
         int m = INT_MIN;
-        int j;
+        int j=0;
         for(auto y: b){
-            if(y.second>m){
+            if(y.second>=m){
                 m = y.second;
                 j=y.first;
             }
