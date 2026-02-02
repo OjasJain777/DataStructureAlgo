@@ -9,28 +9,32 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
-void t(TreeNode *a, unordered_map<int, int> &b, int i){
+void t(TreeNode *a,  vector<int> &ans, int i){
     if(a==0){
         return;
     }
-    b[i] += a->val;
-    t(a->left, b, i+1);
-    t(a->right, b, i+1);
+    if(i>ans.size()){
+        ans.push_back(a->val);
+    }
+    else{
+        ans[i-1] += a->val;
+    }
+    t(a->left, ans, i+1);
+    t(a->right, ans, i+1);
 }
 class Solution {
 public:
-    int maxLevelSum(TreeNode* root) {
-        unordered_map<int,int> b;
-        t(root, b,0);
+    int maxLevelSum(TreeNode* root){
         int m = INT_MIN;
-        int j=0;
-        for(auto y: b){
-            if(y.second>=m){
-                m = y.second;
-                j=y.first;
+        int j =0;
+        vector<int> ans;
+        t(root, ans, 1);
+        for(int i =0; i<ans.size();i++){
+            if(ans[i]>m){
+                m=ans[i];
+                j= i+1;
             }
         }
-        return j+1;
+        return j;
     }
 };
