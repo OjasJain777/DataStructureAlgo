@@ -14,17 +14,20 @@ void t(vector<int> &arr, TreeNode *a, int k){
         return;
     }
     t(arr, a->left,k);
-    arr.push_back(a->val);
-    t(arr,a->right,k);
     if(arr.size()==k){
         return;
     }
+    arr.push_back(a->val);
+    if(arr.size()==k){
+        return;
+    }
+    t(arr,a->right,k);
 }
 class Solution {
 public:
     int kthSmallest(TreeNode* root, int k) {
         vector<int> ans;
         t(ans, root, k);
-        return ans[k-1];
+        return ans[ans.size()-1];
     }
 };
