@@ -16,6 +16,9 @@ void t(vector<int> &arr, TreeNode *a, int k){
     t(arr, a->left,k);
     arr.push_back(a->val);
     t(arr,a->right,k);
+    if(arr.size()==k){
+        return;
+    }
 }
 class Solution {
 public:
