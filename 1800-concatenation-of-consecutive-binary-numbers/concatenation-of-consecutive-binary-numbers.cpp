@@ -21,16 +21,7 @@ void adder(vector<int> &a, long long &ans){
         ans = (ans * 2 + a[k]) % MOD;
     }
 }
-int t(vector<int> bitrack){
-    int j = 0;
-    int ans = 0;
-    while(j<bitrack.size()){
-        ans *= 2;
-        ans += bitrack[j];
-        j++;
-    }
-    return ans;
-}
+
 class Solution {
 public:
     int concatenatedBinary(int n) {
