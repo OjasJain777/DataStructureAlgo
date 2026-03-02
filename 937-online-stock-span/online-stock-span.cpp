@@ -1,21 +1,23 @@
 class StockSpanner {
 public:
-    vector<int> a;
+    vector<vector<int>> a;
     StockSpanner() {
-        a ={};
+        a = {};
     }
     
     int next(int price) {
         int i = a.size()-1;
         int c =1;
         while(i>=0){
-            if(a[i] >price){
+            if(a[i][0] <= price){
+                c += a[i][1];
+                i -= a[i][1];
+            }
+            else{
                 break;
             }
-            c++;
-            i--;
         }
-        a.push_back(price);
+        a.push_back({price, c});
         return c;
     }
 };
