@@ -9,7 +9,7 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-void t(TreeNode *c, unordered_map<int, vector<vector<int>>> &b, vector<int> a, int sum){
+void t(TreeNode *c, unordered_map<int, vector<vector<int>>> &b, vector<int> &a, int sum){
     if(c==0){
         return;
     }
@@ -17,12 +17,14 @@ void t(TreeNode *c, unordered_map<int, vector<vector<int>>> &b, vector<int> a, i
         sum += c->val;
         a.push_back(c->val);
         b[sum].push_back(a);
+        a.pop_back();
         return;
     }
     sum += c->val;
     a.push_back(c->val);
     t(c->left, b,a , sum);
-    t(c->right, b, a, sum);
+    t(c->right, b, a, sum);        
+    a.pop_back();
 }
 class Solution {
 public:
