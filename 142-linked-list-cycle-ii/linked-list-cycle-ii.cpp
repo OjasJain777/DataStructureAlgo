@@ -9,17 +9,11 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        ListNode *a= head;
-        if(a==0){
-            return NULL;
-        }
-        while(a->next!=NULL){
-            if(a->next->val == INT_MIN){
-                return a->next;
-            }
+        ListNode *a = head;
+        while(a!=0 && a->val != INT_MIN){
             a->val = INT_MIN;
             a=a->next;
         }
-        return NULL;
+        return a;
     }
 };
