@@ -1,40 +1,30 @@
-void t(unordered_map<int, int> &b, int &j,int k, vector<int> &a, vector<int> &nums2){
-    if(b.size()==0){
-        b[nums2[j]] = -1;
-        a.push_back(nums2[j]);
+void t(unordered_map<int, int> &b, int &a, int k){
+    if(k<a){
+        b[k] = a;
         return;
     }
-    if(k==-1){
-        b[nums2[j]] =-1;
-        a.push_back(nums2[j]);
+    if(a==-1){
+        b[k] = -1;
         return;
     }
-    else if(nums2[j] < k){
-        b[nums2[j]] = k;
-        a.push_back(nums2[j]);
-        return;
-    }
-    else{
-        k=b[k];
-        t(b, j, k, a, nums2);
-    }
+    a = b[a];
+    t(b, a, k);
 }
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
         int j =nums2.size()-1;
-        vector<int> a;
-        unordered_map<int, int> b;
+        int a = INT_MIN;
+        unordered_map<int, int> b = {{INT_MIN ,-1}};
         while(j>=0){
-            int k = a.size()-1;
-            if(k>=0){
-                k = a[k];
+            if(j<nums2.size()-1){
+                a = nums2[j+1];
             }
-            t(b, j, k, a, nums2);
+            t(b, a, nums2[j]);
             j--;
         }
-        for(int l =0; l<nums1.size();l++){
-            nums1[l] = b[nums1[l]];
+        for(int i =0; i<nums1.size();i++){
+            nums1[i] = b[nums1[i]];
         }
         return nums1;
     }
