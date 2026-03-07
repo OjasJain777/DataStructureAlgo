@@ -1,30 +1,22 @@
-void t(unordered_map<int, int> &b, int &a, int k){
-    if(k<a){
-        b[k] = a;
-        return;
-    }
-    if(a==-1){
-        b[k] = -1;
-        return;
-    }
-    a = b[a];
-    t(b, a, k);
-}
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-        int j =nums2.size()-1;
-        int a = INT_MIN;
-        unordered_map<int, int> b = {{INT_MIN ,-1}};
-        while(j>=0){
-            if(j<nums2.size()-1){
-                a = nums2[j+1];
+        vector<int> a;
+        unordered_map<int, int> b;
+        for(int j =nums2.size()-1;j>=0;j--){
+            while(a.size()>0 && nums2[j] > a[a.size()-1]){
+                a.pop_back();
             }
-            t(b, a, nums2[j]);
-            j--;
+            if(a.size()==0){
+                b[nums2[j]] = -1;
+            }
+            else{
+                b[nums2[j]] = a[a.size()-1];
+            }
+            a.push_back(nums2[j]);
         }
-        for(int i =0; i<nums1.size();i++){
-            nums1[i] = b[nums1[i]];
+        for(int k =0; k<nums1.size();k++){
+            nums1[k] = b[nums1[k]];
         }
         return nums1;
     }
