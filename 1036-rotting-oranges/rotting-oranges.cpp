@@ -1,4 +1,4 @@
-void d(vector<vector<int>> &grid, queue<pair<int,int>> q1,vector<vector<bool>> &v, int &t){
+void d(vector<vector<int>> &grid, queue<pair<int,int>> &q1,vector<vector<bool>> &v, int &t){
     queue<pair<int, int>> q;
     if(q1.size()==0){
         return;
