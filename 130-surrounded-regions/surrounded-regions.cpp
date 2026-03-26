@@ -1,63 +1,67 @@
 class Solution {
 public:
-    void bfs(int startI, int startJ, vector<vector<char>>& board, vector<vector<bool>>& v) {
-        int m = board.size();
-        int n = board[0].size();
-        
+    void solve(vector<vector<char>>& board) {
         queue<pair<int, int>> q;
-        vector<pair<int, int>> currentIsland; // To store all 'O's in the current group
-        bool touchesBorder = false;
-
-        q.push({startI, startJ});
-        v[startI][startJ] = true;
-
-        int dx[] = {1, -1, 0, 0};
-        int dy[] = {0, 0, 1, -1};
-
-        while (!q.empty()) {
-            pair<int, int> curr = q.front();
-            q.pop();
-            currentIsland.push_back(curr);
-
-            int i = curr.first;
-            int j = curr.second;
-
-            // If ANY cell in this island is on the edge, the whole island is safe
-            if (i == 0 || i == m - 1 || j == 0 || j == n - 1) {
-                touchesBorder = true;
+        for(int k =0; k<board.size();k++){
+            if(board[k][0]=='O'){
+                board[k][0] = '#';
+                q.push({k, 0});
             }
-
-            for (int k = 0; k < 4; k++) {
-                int ni = i + dx[k];
-                int nj = j + dy[k];
-
-                if (ni >= 0 && ni < m && nj >= 0 && nj < n && board[ni][nj] == 'O' && !v[ni][nj]) {
-                    v[ni][nj] = true;
-                    q.push({ni, nj});
+            if(board[k][board[0].size()-1]=='O'){
+                q.push({k, board[0].size()-1});
+                board[k][board[0].size()-1] = '#';
+            }
+        }
+        for(int k =0; k<board[0].size();k++){
+            if(board[0][k]=='O'){
+                q.push({0, k});
+                board[0][k] = '#';
+            }
+            if(board[board.size()-1][k]=='O'){
+                q.push({board.size()-1, k});
+                board[board.size()-1][k]= '#';
+            }
+        }
+        while(q.size()>0){
+            auto y = q.front();
+            int i = y.first;
+            int j = y.second;
+            q.pop();
+            vector<int> dx = {1, -1, 0, 0};
+            vector<int> dy = {0, 0, 1, -1};
+            for(int k =0; k<dx.size();k++){
+                if(i+dx[k]>=0 && i+dx[k]< board.size() && j+dy[k]>=0 && j+dy[k] < board[0].size() && board[i+dx[k]][j+dy[k]]=='O'){
+                    q.push({i+dx[k], j+dy[k]});
+                    board[i+dx[k]][j+dy[k]] = '#';
                 }
             }
         }
-
-        // Decision phase: Only flip if the island was completely surrounded (didn't touch border)
-        if (!touchesBorder) {
-            for (auto& cell : currentIsland) {
-                board[cell.first][cell.second] = 'X';
+        for(int r =0; r<board.size();r++){
+            for(int c =0; c<board[0].size();c++){
+                if(board[r][c]=='O'){
+                    q.push({r,c});
+                    board[r][c]='X';
+                }
             }
         }
-    }
-
-    void solve(vector<vector<char>>& board) {
-        if (board.empty()) return;
-        int m = board.size();
-        int n = board[0].size();
-        
-        vector<vector<bool>> v(m, vector<bool>(n, false));
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                // If we find an 'O' we haven't processed yet, start a BFS
-                if (board[i][j] == 'O' && !v[i][j]) {
-                    bfs(i, j, board, v);
+        while(q.size()>0){
+            auto y = q.front();
+            int i = y.first;
+            int j = y.second;
+            vector<int> dx = {1, -1, 0, 0};
+            vector<int> dy  {0, 0, 1, -1};
+            q.pop();
+            for(int k =0; k<dx.size();k++){
+                if(i+dx[k]>=0 && i+dx[k] < board.size() && j+dy[k] >=0 && j+dy[k] < board[0].size() && board[i+dx[k]][j+dy[k]]=='O'){
+                    q.push({i+dx[k], j+dy[k]});
+                    board[i+dx[k]][j+dy[k]] = 'X';
+                }
+            }
+        }
+        for(int r =0; r< board.size(); r++){
+            for(int c= 0; c<board[0].size(); c++){
+                if(board[r][c] == '#'){
+                    board[r][c] = 'O';
                 }
             }
         }
