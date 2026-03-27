@@ -1,23 +1,27 @@
 class Solution {
   public:
     vector<int> topoSort(int V, vector<vector<int>>& edges) {
-        unordered_map<int, vector<int>> b;
-        vector<int> d(V,0);
-        for(int i =0; i<edges.size();i++){
-            b[edges[i][0]].push_back(edges[i][1]);
-            d[edges[i][1]]++;
-        }
+        vector<int> c(V);
         vector<int> ans;
-        int t = 0;
-        while(t<V){
-            for(int k =0; k<d.size();k++){
-                if(d[k]==0){
-                    t++;
-                    ans.push_back(k);
-                    for(int h =0; h<b[k].size();h++){
-                        d[b[k][h]]--;
-                    }
-                    d[k]--;
+        queue<int> q;
+        vector<vector<int>> adj(V);
+        for(int i =0; i< edges.size(); i++){
+            adj[edges[i][0]].push_back(edges[i][1]);
+            c[edges[i][1]]++;
+        }
+        for(int i =0; i<c.size();i++){
+            if(c[i]==0){
+                q.push(i);
+            }
+        }
+        while(q.size()>0){
+            int n = q.front();
+            q.pop();
+            ans.push_back(n);
+            for(int j =0; j<adj[n].size();j++){
+                c[adj[n][j]]--;
+                if(c[adj[n][j]]==0){
+                    q.push(adj[n][j]);
                 }
             }
         }
