@@ -10,18 +10,16 @@ public:
             adj[i][i]=0;
         }
         for(int k =0; k<n;k++){
-            vector<vector<long long>> cur(n, vector<long long>(n, INT_MAX));
             for(int i =0; i<n;i++){
                 for(int j =0; j<n;j++){
                     if(i==k || j==k){
-                        cur[i][j] = adj[i][j];
+                        adj[i][j] = adj[i][j];
                     }
                     else{
-                        cur[i][j] = min(adj[i][j], adj[i][k] + adj[k][j]);
+                        adj[i][j] = min(adj[i][j], adj[i][k] + adj[k][j]);
                     }
                 }
             }
-            adj = cur;
         }
         int g =-1;
         int b;
