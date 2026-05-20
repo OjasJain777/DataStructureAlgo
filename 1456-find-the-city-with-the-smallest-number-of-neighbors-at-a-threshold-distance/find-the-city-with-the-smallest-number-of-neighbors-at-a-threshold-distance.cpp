@@ -1,63 +1,70 @@
 class Solution {
 public:
-    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
 
-        const long long INF = 1e18;
+    int findTheCity(int n,
+                    vector<vector<int>>& edges,
+                    int distanceThreshold) {
 
-        vector<vector<long long>> adj(
-            n, vector<long long>(n, INF)
+        const int INF = 1e9;
+
+        vector<vector<int>> dist(
+            n, vector<int>(n, INF)
         );
 
-        for(auto &y : edges){
-            adj[y[0]][y[1]] = y[2];
-            adj[y[1]][y[0]] = y[2];
+        for(int i = 0; i < n; i++) {
+            dist[i][i] = 0;
         }
 
-        for(int i = 0; i < n; i++){
-            adj[i][i] = 0;
+        for(auto &e : edges) {
+
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+
+            dist[u][v] = w;
+            dist[v][u] = w;
         }
 
         // Floyd-Warshall
-        for(int k = 0; k < n; k++){
+        for(int k = 0; k < n; k++) {
 
-            for(int i = 0; i < n; i++){
+            for(int i = 0; i < n; i++) {
 
-                for(int j = 0; j < n; j++){
+                // tiny cache optimization
+                int dik = dist[i][k];
 
-                    if(adj[i][k] == INF ||
-                       adj[k][j] == INF)
-                        continue;
+                for(int j = 0; j < n; j++) {
 
-                    adj[i][j] = min(
-                        adj[i][j],
-                        adj[i][k] + adj[k][j]
-                    );
+                    if(dik + dist[k][j] < dist[i][j]) {
+
+                        dist[i][j] =
+                            dik + dist[k][j];
+                    }
                 }
             }
         }
 
-        int minReachable = INT_MAX;
-        int city = -1;
+        int bestCity = -1;
+        int minCnt = INT_MAX;
 
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < n; i++) {
 
             int cnt = 0;
 
-            for(int j = 0; j < n; j++){
+            for(int j = 0; j < n; j++) {
 
-                if(adj[i][j] <= distanceThreshold){
+                if(dist[i][j] <= distanceThreshold) {
                     cnt++;
                 }
             }
 
-            // larger index on tie
-            if(cnt <= minReachable){
+            if(cnt <= minCnt) {
 
-                minReachable = cnt;
-                city = i;
+                minCnt = cnt;
+                bestCity = i;
             }
         }
 
-        return city;
+        return bestCity;
     }
 };
