@@ -9,45 +9,27 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+void t(map<int, map<int, vector<int>>> &b, TreeNode *a, int i, int j){
+    if(a==0){
+        return;
+    }
+    b[j][i].push_back(a->val);
+    t(b, a->left, i+1, j-1);
+    t(b,a->right, i+1, j+1);
+}
 class Solution {
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
-        map<int, vector<vector<int>>> b;
-        queue<pair<int, pair<int,TreeNode *>>> q;
+        map<int, map<int, vector<int>>> b;
+        t(b, root, 0,0);
         vector<vector<int>> ans;
-        if(root==0){
-            return ans;
-        }
-        q.push({0, {0,  root}});
-        while(q.size()!=0){
-            auto j = q.front();
-            int v = j.first;
-            int l = j.second.first;
-            TreeNode *a = j.second.second;
-            q.pop();
-            if(l+1>b[v].size()){
-                for(int k =b[v].size(); k<l;k++){
-                    b[v].push_back({});
-                }
-                b[v].push_back({a->val});
-            }
-            else{b[v][b[v].size()-1].push_back(a->val);}
-            if(a->left!=0){
-                q.push({v-1, {l+1, a->left}});
-            }
-            if(a->right!=0){
-                q.push({v+1, {l+1, a->right}});
-            }
-        }
         for(auto y: b){
-            vector<int> a;
-            for(auto &g: y.second){
-                sort(g.begin(), g.end());
-                for(auto c: g){
-                    a.push_back(c);
-                }
+            vector<int> m;
+            for(auto x: y.second){
+                sort(x.second.begin(), x.second.end());
+                m.insert(m.end(), x.second.begin(), x.second.end());
             }
-            ans.push_back(a);
+            ans.push_back(m);
         }
         return ans;
     }
