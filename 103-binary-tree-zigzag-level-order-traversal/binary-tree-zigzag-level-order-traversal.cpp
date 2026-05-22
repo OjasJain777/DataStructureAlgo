@@ -14,29 +14,48 @@ public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         queue<TreeNode *> q;
         vector<vector<int>> ans;
+        queue<int> q1;
+        stack<int> st;
         if(root==0){
             return ans;
         }
         q.push(root);
+        q1.push(root->val);
         int i =0;
         while(q.size()!=0){
-            int n = q.size();
-            vector<int> a(n);
-            for(int k =0; k<n;k++){
-                auto y = q.front();
-                q.pop();
+            vector<int> a;
+            int n =q.size();
+            for(int k =0; k< n;k++){
                 if(i==0){
-                    a[k] = y->val;
+                    auto y = q.front();
+                    q.pop();
+                    auto x = q1.front();
+                    q1.pop();
+                    a.push_back(x);
+                    if(y->left!=0){
+                        q.push(y->left);
+                        st.push(y->left->val);
+                    }
+                    if(y->right!=0){
+                        q.push(y->right);
+                        st.push(y->right->val);
+                    }
                 }
                 else{
-                    a[n-k-1] = y->val;
-                }
-                if(y->left !=0){
-                    q.push(y->left);
-                }
-                if(y->right!=0){
-                    q.push(y->right);
-                }
+                    auto y = q.front();
+                    q.pop();
+                    auto x = st.top();
+                    st.pop();
+                    a.push_back(x);
+                    if(y->left!=0){
+                        q.push(y->left);
+                        q1.push(y->left->val);
+                    }
+                    if(y->right!=0){
+                        q.push(y->right);
+                        q1.push(y->right->val);
+                    }
+                }               
             }
             ans.push_back(a);
             i=(i+1)%2;
