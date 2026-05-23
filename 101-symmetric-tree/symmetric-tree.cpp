@@ -26,16 +26,7 @@ public:
     bool isSymmetric(TreeNode* root) {
         TreeNode *a = root;
         TreeNode *b = root;
-        if(root==0){
-            return 1;
-        }
-        if(a->left ==0 && b->right ==0 ){
-            return 1;
-        }
-        if(a->left ==0 || b->right==0){
-            return 0;
-        }
-        return t(a->left, b->right);
+        return t(a, b);
         
     }
 };
