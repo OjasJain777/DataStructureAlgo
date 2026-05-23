@@ -9,24 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
 bool t(TreeNode *a, TreeNode *b){
     if(a==0 && b==0){
         return 1;
     }
-    else if(a==0 || b==0){
+    if(a==0 || b==0){
         return 0;
     }
-    else if(a->val != b->val){
+    if(a->val !=b->val){
         return 0;
     }
-    bool c  = t(a->left, b->right);
-    bool d = t(a->right, b->left);
-    return c*d;
+    return (t(a->left, b->right) && t(a->right, b->left));
 }
 class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
-        return t(root, root);
+        TreeNode *a = root;
+        TreeNode *b = root;
+        if(root==0){
+            return 1;
+        }
+        if(a->left ==0 && b->right ==0 ){
+            return 1;
+        }
+        if(a->left ==0 || b->right==0){
+            return 0;
+        }
+        return t(a->left, b->right);
+        
     }
 };
