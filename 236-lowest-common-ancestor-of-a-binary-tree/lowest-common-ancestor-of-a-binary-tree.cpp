@@ -7,34 +7,58 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-bool t(TreeNode *a, set<TreeNode *> &ans, int target){
+void t(TreeNode *a, TreeNode *f, unordered_set<TreeNode *> &s, int &c){
+    if(c==1){
+        return;
+    }
     if(a==0){
-        return 0;
+        return;
     }
-    ans.insert(a);
-    if(a->val==target){
-        return 1;
+    if(a==f){
+        c=1;
+        s.insert(a);
+        return;
     }
-    if(t(a->left, ans, target) || t(a->right, ans, target)){
-        return 1;
+    s.insert(a);
+    t(a->left, f, s, c);
+    t(a->right, f, s, c);
+    if(c==0){
+        s.erase(a);
     }
-
-    ans.erase(a);
-    return 0;
+}
+void t1(TreeNode *a, TreeNode *f, vector<TreeNode *> &s, int &c){
+    if(c==1){
+        return;
+    }
+    if(a==0){
+        return;
+    }
+    if(a==f){
+        c=1;
+        s.push_back(a);
+        return;
+    }
+    s.push_back(a);
+    t1(a->left, f, s, c);
+    t1(a->right, f, s, c);
+    if(c==0){
+        s.pop_back();
+    }
 }
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        set<TreeNode *> ans1;
-        set<TreeNode *> ans2;
-        t(root, ans1, p->val);
-        t(root, ans2, q->val);
-        TreeNode *t;
-        for(TreeNode *x: ans1){
-            if(ans2.count(x)!=0){
-                t=x;
+        int c = 0;
+        unordered_set<TreeNode *> s;
+        vector<TreeNode *> v;
+        t(root, p, s, c);
+        c=0;
+        t1(root, q, v, c);
+        for(int i = v.size()-1; i>=0 ;i--){
+            if(s.count(v[i])!=0){
+                return v[i];
             }
         }
-        return t;
+        return root;
     }
 };
