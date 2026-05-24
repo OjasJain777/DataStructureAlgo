@@ -9,32 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-void t(TreeNode *a, vector<TreeNode*> &b){
+void t(TreeNode *a){
     if(a==0){
         return;
     }
-    b.push_back(a);
-    t(a->left,b);
-    t(a->right, b);
+    t(a->left);
+    t(a->right);
+    TreeNode *b = a->right;
+    a->right = a->left;
+    a->left = 0;
+    while(a->right){
+        a=a->right;
+    }
+    a->right = b;
 }
-
 class Solution {
 public:
     void flatten(TreeNode* root) {
-        vector<TreeNode*> b;
-        t(root, b);
-        root=0;
-        TreeNode *temp = 0;
-        for(TreeNode *x: b){
-            if(root==0){
-                root=x;
-                temp=x;
-            }
-            else{
-                temp->right = x;
-                temp=x;
-            }
-            temp->left=0;
-        }
+        t(root);
     }
 };
