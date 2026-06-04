@@ -1,25 +1,36 @@
-int t(int i, int j, vector<vector<int>> &mat, vector<vector<int>> &dp){
-    if(i==mat.size()-1){
-        return mat[i][j];
-    }
-    if(dp[i][j]==INT_MIN){
-        for(int k =0;k<mat[0].size();k++){
-            if(j==k){
-                continue;
-            }
-            dp[i][j] = max(dp[i][j], mat[i][j] + t(i+1, k,mat, dp));
-        }
-    }
-    return  dp[i][j];
-}
 class Solution {
-  public:
+public:
     int maximumPoints(vector<vector<int>>& mat) {
-        vector<vector<int>> dp(mat.size(), vector<int>(mat[0].size(),INT_MIN));
-        int ans = INT_MIN;
-        for(int j =0; j<mat[0].size();j++){
-            ans = max(ans, t(0, j, mat, dp));
+        int n = mat.size();
+        int m = mat[0].size();
+
+        vector<int> dp = mat[n - 1];
+
+        for (int i = n - 2; i >= 0; i--) {
+
+            int mx1 = INT_MIN, mx2 = INT_MIN;
+            int idx1 = -1;
+
+            for (int j = 0; j < m; j++) {
+                if (dp[j] > mx1) {
+                    mx2 = mx1;
+                    mx1 = dp[j];
+                    idx1 = j;
+                } else if (dp[j] > mx2) {
+                    mx2 = dp[j];
+                }
+            }
+
+            vector<int> ndp(m);
+
+            for (int j = 0; j < m; j++) {
+                int best = (j == idx1 ? mx2 : mx1);
+                ndp[j] = mat[i][j] + best;
+            }
+
+            dp = move(ndp);
         }
-        return ans;
+
+        return *max_element(dp.begin(), dp.end());
     }
 };
