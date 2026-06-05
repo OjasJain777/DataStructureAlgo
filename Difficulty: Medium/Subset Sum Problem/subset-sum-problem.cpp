@@ -1,25 +1,30 @@
-bool t(int k, int &sum, int s, int r ,vector<int> &arr){
-    if(s > sum){
+bool t(int k, int s, int r,int &sum, map<pair<int,int>, bool> &dp, vector<int> &arr){
+    if(s>sum){
         return 0;
     }
-    if(r+s<sum){
+    if(s+r < sum){
         return 0;
     }
     if(s==sum){
         return 1;
     }
-    if(k>=arr.size()){
+    if(k>= arr.size()){
         return 0;
     }
-    return t(k+1, sum, s+arr[k], r-arr[k], arr) || t(k+1, sum, s, r-arr[k],arr);
+    if(dp.count({k,s})!=0){
+        return dp[{k,s}];
+    }
+    dp[{k,s}] = t(k+1, s, r-arr[k], sum,dp,arr) ||t(k+1, s+arr[k], r-arr[k], sum, dp,arr);
+    return dp[{k,s}];
 }
 class Solution {
   public:
     bool isSubsetSum(vector<int>& arr, int sum) {
-        int c =0;
-        for(auto x: arr){
-            c+=x;
+        int r=0;
+        for(auto x : arr){
+            r+=x;
         }
-        return t(0, sum, 0, c, arr);
+        map<pair<int,int>,bool> dp;
+        return t(0, 0, r, sum, dp, arr);
     }
 };
