@@ -1,65 +1,48 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        vector<int> a;
-        vector<int> a1 (height.size(), 0);
-        for(int k = height.size()-1;k>=0;k--){
-            while(a.size()>0 && height[k] > height[a[a.size()-1]]){
-                a.pop_back();
+        vector<int> nge(height.size());
+        stack<int> s;
+        for(int j =height.size()-1;j>=0;j--){
+            while(s.size()!=0 && height[s.top()]<height[j]){
+                s.pop();
             }
-            if(a.size()==0){
-                a1[k] = -1;
+            if(s.size()==0){
+                nge[j]=-1;
             }
             else{
-                a1[k] = a[a.size()-1];
+                nge[j]= s.top();
             }
-            a.push_back(k);
+            s.push(j);
         }
-        int i =0;
-        int g = 0;
-        int c =0;
+        vector<int> ngel(height.size());
+        s = {};
+        for(int j =0;j<height.size();j++){
+            while(s.size()!=0 && height[s.top()]<height[j]){
+                s.pop();
+            }
+            if(s.size()==0){
+                ngel[j]=-1;
+            }
+            else{
+                ngel[j]= s.top();
+            }
+            s.push(j);
+        }
+        int e = 0;
         int area=0;
-        int j = 0;
-        while(i<height.size()){
-            if(a1[i] == -1){
-                break;
+        while(nge[e]!=-1){
+            for(int k = e+1;k<nge[e];k++){
+                area += (height[e] - height[k]);
             }
-            else{
-                c = height[i];
-                j = a1[i];
-                while(i<j){
-                    g += (c-height[i]);
-                    i++;
-                }
-                area += g;
-                g=0;
-            }
+            e = nge[e];
         }
-        a = {};
-        for(int k =0;k<height.size();k++){
-            while(a.size()>0 && height[k] > height[a[a.size()-1]]){
-                a.pop_back();
+        int k = height.size()-1;
+        while(k>e){
+            for(int j = k-1; j> ngel[k];j--){
+                area += (height[k] - height[j]);
             }
-            if(a.size()==0){
-                a1[k] = -1;
-            }
-            else{
-                a1[k] = a[a.size()-1];
-            }
-            a.push_back(k);
-        }
-        int p = height.size()-1;
-        g=0;
-        c= 0;
-        while(p>i){
-            c = height[p];
-            j = a1[p];
-            while(p>j){
-                g += (c - height[p]);
-                p--;
-            }
-            area += g;
-            g=0;
+            k = ngel[k];
         }
         return area;
     }
