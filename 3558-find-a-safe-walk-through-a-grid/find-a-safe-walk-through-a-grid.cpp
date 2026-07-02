@@ -1,32 +1,26 @@
-vector<vector<int>> d = {{1,0},{-1,0},{0,1},{0,-1}};
 class Solution {
 public:
     bool findSafeWalk(vector<vector<int>>& grid, int health) {
-        priority_queue<vector<int>> q;
-        q.push({health, 0,0});
+        vector<vector<int>> d = {{1,0},{-1,0},{0,1},{0,-1}};
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> q;
         vector<vector<bool>> v(grid.size(), vector<bool>(grid[0].size(),0));
+        q.push({grid[0][0],0,0});
         while(q.size()!=0){
             auto y = q.top();
-            int h = y[0];
             q.pop();
-            int r= y[1];
-            int c = y[2];
-            if(v[r][c]==1){
+            if(v[y[1]][y[2]]){
                 continue;
             }
-            v[r][c]=1;
-            if(grid[r][c]==1){
-                if(h==1){
-                    continue;
+            v[y[1]][y[2]] =1;
+            if(y[1] == grid.size()-1 && y[2] == grid[0].size()-1){
+                if(y[0] < health){
+                    return 1;
                 }
-                h--;
+                return 0;
             }
-            if(r==grid.size()-1 && c==grid[0].size()-1){
-                return 1;
-            }
-            for(auto x : d){
-                if(r+x[0] >=0 && r+x[0] < grid.size() && c+x[1] >=0 && c + x[1] < grid[0].size() && v[r+x[0]][c+x[1]]==0){
-                    q.push({h, r+x[0], c+x[1]});
+            for(auto x: d){
+                if(y[1] + x[0] < grid.size() && y[1] + x[0] >=0 && y[2]+x[1] >=0 && y[2] + x[1] < grid[0].size() && v[y[1] + x[0]][y[2] + x[1]]==0){
+                    q.push({y[0] + grid[y[1] + x[0]][y[2]+x[1]], y[1]+x[0], y[2] + x[1]});
                 }
             }
         }
