@@ -1,49 +1,68 @@
 class Solution {
 public:
     int numEnclaves(vector<vector<int>>& grid) {
+        int N = grid.size();
+        int M = grid[0].size();
+
         queue<pair<int,int>> q;
-        for(int k =0;k<grid.size();k++){
-            if(grid[k][0]==1){
-                q.push({k,0});
-                grid[k][0]=0;
+        vector<vector<bool>> v(N, vector<bool>(M, false));
+        vector<vector<int>> d = {{1,0},{-1,0},{0,-1},{0,1}};
+
+        // First and Last Row
+        for(int j = 0; j < M; j++){
+            if(grid[0][j] == 1){
+                q.push({0, j});
+                v[0][j] = true;
             }
-            if(grid[k][grid[0].size()-1]==1){
-                q.push({k, grid[0].size()-1});
-                grid[k][grid[0].size()-1]=0;
-            }
-        }
-        for(int k =0; k<grid[0].size();k++){
-            if(grid[0][k] == 1){
-                q.push({0, k});
-                grid[0][k]=0;
-            }
-            if(grid[grid.size()-1][k]==1){
-                q.push({grid.size()-1, k});
-                grid[grid.size()-1][k] = 0;
+
+            if(grid[N-1][j] == 1 && !v[N-1][j]){
+                q.push({N-1, j});
+                v[N-1][j] = true;
             }
         }
-        vector<int> dx = {1, -1, 0, 0};
-        vector<int> dy = {0,0, 1,-1};
-        while(q.size()>0){
+
+        // First and Last Column
+        for(int i = 0; i < N; i++){
+            if(grid[i][0] == 1 && !v[i][0]){
+                q.push({i, 0});
+                v[i][0] = true;
+            }
+
+            if(grid[i][M-1] == 1 && !v[i][M-1]){
+                q.push({i, M-1});
+                v[i][M-1] = true;
+            }
+        }
+
+        while(!q.empty()){
             auto y = q.front();
-            int i = y.first;
-            int j = y.second;
             q.pop();
-            for(int k =0; k<dx.size();k++){
-                if(i+dx[k]>=0 && i+dx[k]< grid.size() && j+dy[k] >=0 && j+dy[k] < grid[0].size() && grid[i+dx[k]][j+dy[k]] == 1){
-                    q.push({i+dx[k], j+dy[k]});
-                    grid[i+dx[k]][j+dy[k]] = 0;
+
+            int r = y.first;
+            int c = y.second;
+
+            for(auto &x : d){
+                if(r + x[0] >= 0 && r + x[0] < N &&
+                   c + x[1] >= 0 && c + x[1] < M &&
+                   !v[r + x[0]][c + x[1]] &&
+                   grid[r + x[0]][c + x[1]] == 1){
+
+                    q.push({r + x[0], c + x[1]});
+                    v[r + x[0]][c + x[1]] = true;
                 }
             }
         }
-        int t =0;
-        for(int r =0; r<grid.size();r++){
-            for(int c = 0; c< grid[0].size(); c++){
-                if(grid[r][c]==1){
-                    t++;
+
+        int ans = 0;
+
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                if(grid[i][j] == 1 && !v[i][j]){
+                    ans++;
                 }
             }
         }
-        return t;
+
+        return ans;
     }
 };
