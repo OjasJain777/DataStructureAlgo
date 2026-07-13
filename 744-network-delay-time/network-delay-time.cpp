@@ -1,47 +1,36 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        // Fast I/O trick jo Leetcode par runtime aadha kar deti hai
-        ios_base::sync_with_stdio(false);
-        cin.tie(NULL);
-
-        // 3D vector ki jagah pair use kiya, memory allocation fast ho gayi
-        vector<vector<pair<int, int>>> adj(n + 1);
-        for(const auto& y: times){ // '&' use kiya taaki copy na ho, direct reference mile
-            adj[y[0]].push_back({y[1], y[2]});
-        }
-
-        vector<int> ans(n + 1, INT_MAX);
+        vector<int> d(n+1,INT_MAX);
         priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> q;
-        
-        ans[0] = 0; // Tera mast jugaad wala fix
-        ans[k] = 0;
-        q.push({0, k});
-        
+        q.push({0,k});
+        vector<vector<vector<int>>> adj(n+1);
+        for(auto &y: times){
+            adj[y[0]].push_back({y[1],y[2]});
+        }
+        d[k]=0;
         while(!q.empty()){
-            auto [d, c] = q.top();
+            auto y= q.top();
             q.pop();
-            
-            if(d > ans[c]) continue;
-            
-            // '&' use kiya taaki loop ke andar har bar pair copy na ho
-            for(const auto& z: adj[c]){
-                int neighbor = z.first;
-                int weight = z.second;
-                
-                if(ans[neighbor] > d + weight){
-                    ans[neighbor] = d + weight;
-                    q.push({ans[neighbor], neighbor});
-                }
+            int cd = y.first;
+            int cn = y.second;
+            if(cd > d[cn]){
+                continue;
+            }
+            for(auto &x: adj[cn]){
+                if(d[x[0]] > cd + x[1]){
+                    d[x[0]] = cd + x[1];
+                    q.push({d[x[0]], x[0]});
+                }   
             }
         }
-        
-        int a = -1;
-        for(int j = 0; j < ans.size(); j++){
-            if(j == k) continue;
-            if(ans[j] == INT_MAX) return -1;
-            a = max(a, ans[j]);
+        int ans = -1;
+        for(int i =1 ; i<n+1;i++){
+            ans = max(ans, d[i]);
         }
-        return a;
+        if(ans == INT_MAX){
+            return -1;
+        }
+        return ans;
     }
 };
