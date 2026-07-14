@@ -1,27 +1,25 @@
-int t(int amt, vector<int> &dp, vector<int> &coins){
-    if(amt == 0){
-        return 0;
+int t(int target, int k, vector<vector<int>> &dp, vector<int> &coins){
+    if(target<0){
+        return 1e9;
     }
-    if(amt<0){
-        return INT_MAX -1 ;
+    if(target == 0){
+        return dp[target][k] = 0;
     }
-    if(dp[amt] != -1){
-        return dp[amt];
+    if(k<0){
+        return 1e9;
     }
-    int ans = INT_MAX;
-    for (int x : coins) {
-        int c = t(amt - x, dp, coins);
-        if (c != INT_MAX) {
-            ans = min(ans, c + 1);
-        }
+    if(dp[target][k] != -1){
+        return dp[target][k];
     }
-    return dp[amt] = ans;
+    int a = t(target - coins[k],k, dp, coins) +1;
+    int b = t(target, k-1, dp,coins);
+    return dp[target][k] = min(a,b);
 }
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount+1,-1);
-        int a = t(amount, dp, coins);
-        return a == INT_MAX ? -1 : a;
+        vector<vector<int>> dp(amount+1, vector<int>(coins.size()+1,-1));
+        int a = t(amount,coins.size()-1, dp, coins);
+        return a >= 1e9 ? -1 : a;
     }
 };
