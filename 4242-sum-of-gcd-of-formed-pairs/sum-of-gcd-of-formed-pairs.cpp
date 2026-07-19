@@ -3,6 +3,8 @@
 class Solution {
 public:
     long long gcdSum(vector<int>& nums) {
+        std::ios_base::sync_with_stdio(false);
+        std::cin.tie(NULL);
         int ma = INT_MIN;
         vector<int> p;
 
