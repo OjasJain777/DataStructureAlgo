@@ -15,9 +15,7 @@ public:
                     }
                     bg[i][j]= '.';
                     bg[i][l] = '#';
-                    while(l>=0 && bg[i][l] != '.'){
-                        l--;
-                    }
+                    l--;
                 }
                 else{
                     if(l==-1){
