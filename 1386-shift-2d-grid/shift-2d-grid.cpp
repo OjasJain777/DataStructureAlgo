@@ -17,6 +17,7 @@ public:
     vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
         int m = grid.size();
         int n = grid[0].size();
+        k %= m*n;
         for(int i = 0; i<k;i++){
             l(grid,m,n);
         }
