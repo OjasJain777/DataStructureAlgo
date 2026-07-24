@@ -1,21 +1,17 @@
-int t(int k, int p, vector<int> &nums, vector<vector<int>> &dp){
-    if(k==nums.size()){
-        return 0;
-    }
-    if(dp[k][p+1] == -1){
-        int a = 0;
-        if(p==-1 || nums[k] > nums[p]){
-            a = t(k+1, k, nums, dp)+1;
-        }
-        int b = t(k+1, p, nums, dp);
-        dp[k][p+1] = max(a,b);
-    }
-    return dp[k][p+1];
-}
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
-        vector<vector<int>> dp(nums.size(), vector<int>(nums.size()+1, -1));
-        return t(0, -1, nums, dp);
+        vector<int> dp(nums.size()+1,-1);
+        dp[0] = 0;
+        int ans = 0;
+        for(int k = 0; k<nums.size();k++){
+            for(int j = k;j>=0;j--){
+                if(j==0 || nums[j-1] < nums[k]){
+                    dp[k+1] = max(dp[k+1], dp[j]+1);
+                    ans = max(ans, dp[k+1]);
+                }
+            }
+        }
+        return ans;
     }
 };
