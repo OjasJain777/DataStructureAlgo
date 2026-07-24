@@ -3,7 +3,7 @@ int t(int k, int p, vector<int> &nums, vector<vector<int>> &dp){
         return 0;
     }
     if(dp[k][p+1] == -1){
-        int a = INT_MIN;
+        int a = 0;
         if(p==-1 || nums[k] > nums[p]){
             a = t(k+1, k, nums, dp)+1;
         }
