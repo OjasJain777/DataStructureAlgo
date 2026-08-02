@@ -8,15 +8,15 @@ public:
 
         vector<vector<int>> bucket(nums.size() + 1);
 
-        for (auto &it : freq)
-            bucket[it.second].push_back(it.first);
+        for (auto &[num, f] : freq)
+            bucket[f].push_back(num);
 
         vector<int> ans;
 
-        for (int i = nums.size(); i >= 1 && k > 0; i--) {
-            for (int x : bucket[i]) {
-                ans.push_back(x);
-                if (--k == 0)
+        for (int f = nums.size(); f >= 1 && ans.size() < k; f--) {
+            for (int num : bucket[f]) {
+                ans.push_back(num);
+                if (ans.size() == k)
                     return ans;
             }
         }
