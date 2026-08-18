@@ -9,18 +9,15 @@
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        int a= INT_MIN;
-        ListNode *b = head;
-        if(b==0){
-            return false;
-        }
-        while(b->next!=NULL){
-            if(b->next->val == a){
-                return true;
+        ListNode *f = head;
+        ListNode *s = head;
+        while(f!=0 && f->next!=0){
+            f = f->next->next;
+            s=s->next;
+            if(f==s){
+                return 1;
             }
-            b->val = a;
-            b=b->next;
         }
-        return false;
+        return 0;
     }
 };
