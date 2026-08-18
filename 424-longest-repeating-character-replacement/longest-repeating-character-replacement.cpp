@@ -1,29 +1,27 @@
 class Solution {
 public:
-    int characterReplacement(string s, int a) {
-        int i = 0;
-        int j =0;
-        int ans = 0;
+    int characterReplacement(string s, int k) {
         vector<int> f(26,0);
-        while(j<s.size()){
-            int c = -1;
-            f[s[j]-'A']++;
-            for(int k = 0; k<26;k++){
-                if(c==-1 || f[c] < f[k]){
-                    c= k;
-                }
-                else{
-                    continue;
+        int l  = 0;
+        int ans = 0;
+        int r = 0;
+        while(r<s.size()){
+            int m = 0;
+            f[s[r]-'A']++;
+            for(int i = 0 ; i<26;i++){
+                if(f[m] < f[i]){
+                    m=i;
                 }
             }
-            if(f[c] + a < (j-i+1)){
-                f[s[i]-'A']--;
-                i++;
-                f[s[j]-'A']--;
+            int d = r-l+1-f[m];
+            if(d>k){
+                f[s[l]-'A']--;
+                f[s[r]-'A']--;
+                l++;
             }
             else{
-                ans = max(ans, j-i+1);
-                j++;
+                r++;
+                ans = max(ans, r-l);
             }
         }
         return ans;
