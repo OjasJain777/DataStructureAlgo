@@ -9,34 +9,25 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-int t(TreeNode *a){
+int t(TreeNode *a, bool &b){
     if(a==0){
         return 0;
     }
-    return max(t(a->left),t(a->right)) +1;
-}
-void d(TreeNode *a, int &i){
-    if(a==0){
-        return;
-    }
-    else if(t(a->left)==0 && t(a->right)==0){
-        return;
-    }
-    else if(t(a->left) - t(a->right) <=1 && t(a->left) - t(a->right) >=-1){
-        i *=1;
+    int l  = t(a->left,b);
+    int r = t(a->right,b);
+    if(abs(l-r) <= 1){
+        b *= 1;
     }
     else{
-        i*=0;
-        return;
+        b*=0;
     }
-    d(a->left, i);
-    d(a->right, i);
+    return max(l,r)+1;
 }
 class Solution {
 public:
     bool isBalanced(TreeNode* root) {
-        int i =1;
-        d(root, i);
-        return i;
+        bool b=1;
+        t(root, b);
+        return b;
     }
 };
