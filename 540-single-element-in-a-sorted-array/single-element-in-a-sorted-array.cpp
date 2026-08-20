@@ -3,31 +3,28 @@ public:
     int singleNonDuplicate(vector<int>& nums) {
         int l =0;
         int r = nums.size()-1;
-        int n = nums.size();
         while(l<=r){
-            int mid = (l+r)/2;
-            if(l==r){
-                return nums[l];
+            int m = (l+r)/2;
+            if((m==0 || nums[m-1]!=nums[m]) && (m==nums.size()-1 || nums[m] != nums[m+1])){
+                return nums[m];
             }
-            else if((n/2)%2==0){
-                if(nums[mid-1] == nums[mid]){
-                    r=mid;
+            else if(m != nums.size()-1 && nums[m] == nums[m+1]){
+                if((m-l)%2==0){
+                    l = m+2;
                 }
                 else{
-                    l = mid;
+                    r=m-1;
                 }
-                n = n/2 + 1;
             }
             else{
-                if(nums[mid-1] == nums[mid]){
-                    l = mid+1;
+                if((m-l)%2==0){
+                    r=m-2;
                 }
                 else{
-                    r = mid-1;
+                    l=m+1;
                 }
-                n=n/2;
             }
         }
-        return 0;
+        return -1;
     }
 };
